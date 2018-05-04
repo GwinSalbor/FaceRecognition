@@ -1,24 +1,22 @@
 import os
 import dlib
-import urllib.request
 from PIL import Image
 from skimage import io
 from scipy.spatial import distance
 
-
 sp = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
 facerec = dlib.face_recognition_model_v1('dlib_face_recognition_resnet_model_v1.dat')
 detector = dlib.get_frontal_face_detector()
-img = io.imread('im.jpg')
+img = io.imread('You.jpg') #add your picture
 
 win1 = dlib.image_window()
 win1.clear_overlay()
 win1.set_image(img)
 dets = detector(img, 1)
+
 for k, d in enumerate(dets):
     print("Detection {}: Left: {} Top: {} Right: {} Bottom: {}".format(
         k, d.left(), d.top(), d.right(), d.bottom()))
-
     shape = sp(img, d)
     win1.clear_overlay()
     win1.add_overlay(d)
@@ -26,9 +24,8 @@ for k, d in enumerate(dets):
 face_descriptor1 = facerec.compute_face_descriptor(img, shape)
 print(face_descriptor1)
 
-directory = 'C:\\Users\\Yaroslav\\Desktop\\Foto'
+directory = '' # add directory with your .jpg files
 files = os.listdir(directory)
-#Фильтруем список
 images = filter(lambda x: x.endswith('.jpg'), files)
 
 for i in images:
@@ -48,7 +45,6 @@ for i in images:
     a = distance.euclidean(face_descriptor1, face_descriptor2)
     wait = input("PRESS ENTER TO CONTINUE.")
 
-    a = distance.euclidean(face_descriptor1, face_descriptor2)
     print(a)
     if( a < 0.55):
         image = Image.open("C:\\Users\\Yaroslav\\Desktop\\Foto\\"+ i)
